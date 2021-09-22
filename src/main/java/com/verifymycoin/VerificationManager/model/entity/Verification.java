@@ -32,6 +32,8 @@ public class Verification {
 
     private String revenue;
 
+    private String url;
+
     private String imageUrl;
 
     @Builder
