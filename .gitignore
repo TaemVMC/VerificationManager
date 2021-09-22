@@ -35,3 +35,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### S3 ignore ###
+src/main/resources/aws.yml
+
+### properties ignore ###
+src/main/resources/application.yml
+src/main/resources/application-dev.yml
+src/main/resources/application-local.yml
+src/main/resources/application-prod.yml
