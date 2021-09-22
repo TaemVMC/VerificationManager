@@ -1,4 +1,8 @@
 server:
-  port: 8080
+  port: 8081
 
-foo: bar_default
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/testVMC
+

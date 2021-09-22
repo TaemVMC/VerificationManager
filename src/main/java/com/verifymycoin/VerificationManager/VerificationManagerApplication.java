@@ -10,14 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class VerificationManagerApplication {
 
-	@Value("${foo}")
-	private String configExample;
-
-	@RequestMapping("/")
-	public String home() {
-		return "Hello " + configExample;
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(VerificationManagerApplication.class, args);
 	}
