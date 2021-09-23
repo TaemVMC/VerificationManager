@@ -1,13 +1,16 @@
-package com.verifymycoin.VerificationManager.Config;
+package com.verifymycoin.VerificationManager.service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.verifymycoin.VerificationManager.model.entity.image.CustomImage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -29,9 +32,8 @@ public class S3Uploader {
     private String bucket;
 
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
-    public String upload(MultipartFile multipartFile, String dirName, String saveFileName) throws IOException {
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File convert fail"));
+    public String upload(String dirName, String saveFileName) throws IOException {
+        File uploadFile = convert();
         return upload(uploadFile, dirName, saveFileName);
     }
 
@@ -53,7 +55,6 @@ public class S3Uploader {
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
-
             System.out.println("파일이 삭제되었습니다.");
         } else {
             System.out.println("파일이 삭제되지 못했습니다.");
@@ -78,20 +79,24 @@ public class S3Uploader {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, file_name));
     }
 
-    private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
+    private File convert() throws IOException {
+        String userDir = System.getProperty("user.dir");
+        String filePath = String.format("%s/tmp.png", userDir);
 
-        if(convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
-
-            }
-
-            return Optional.of(convertFile);
-
-        }
-
-        return Optional.empty();
+        File file = new File(filePath);
+        return file;
     }
 
+//    private Optional<File> convert(MultipartFile file) throws IOException {
+//        File convertFile = new File(file.getOriginalFilename());
+//
+//        if(convertFile.createNewFile()) {
+//            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+//                fos.write(file.getBytes());
+//            }
+//
+//            return Optional.of(convertFile);
+//        }
+//        return Optional.empty();
+//    }
 }

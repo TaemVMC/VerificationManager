@@ -1,20 +1,22 @@
 package com.verifymycoin.VerificationManager.controller;
 
-import com.verifymycoin.VerificationManager.Config.S3Uploader;
+import com.verifymycoin.VerificationManager.model.entity.image.CustomImage;
+import com.verifymycoin.VerificationManager.model.entity.image.CustomTextType;
+import com.verifymycoin.VerificationManager.service.S3Uploader;
 import com.verifymycoin.VerificationManager.model.entity.Verification;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 public class VerificationController {
 
     private final VerificationRepository verificationRepository;
@@ -23,66 +25,54 @@ public class VerificationController {
 
     @GetMapping("/verification")
     @ApiOperation(value = "증명 목록", notes = "사용자의 증명 목록")
-    public List<Verification> verificationList() {
+    public List<Verification> verificationList(@RequestHeader HttpHeaders header) {
         // jwt header의 userId
-        String userId = null;
+        String userId = header.getFirst("userId");
 
         return verificationRepository.findAllByUserId(userId);
     }
 
     @PostMapping("/verification")
     @ApiOperation(value = "증명 목록 저장", notes = "사용자의 증명 목록 저장")
-    public String saveVerificationList(@RequestBody List<Verification> verification) {
-        return verificationRepository.saveAll(verification).get(0).getId();
+    public String saveVerificationList(@RequestHeader HttpHeaders header,
+                                       @RequestBody Verification verification) throws IOException {
+
+        // 1. 증명목록
+        verification.setUserId(header.getFirst("userId"));
+
+        // 2. 이미지 생성 -> service 따로 빼기
+        String userDir = System.getProperty("user.dir");;
+        String filePath = String.format("%s/tmp.png", userDir);
+        log.info("생성될 파일 : {}", filePath);
+
+        CustomImage image = CustomImage.builder()
+                .imageWidth(600)
+                .imageHeight(400)
+                .imageColor("#C3D8E6")
+                .build();
+
+        image.converting(
+                filePath,
+                CustomTextType.title.getText(header.getFirst("userId") + "'s Verification"),
+                CustomTextType.subtitle.getText("coin : " + verification.getCoinName()),
+                CustomTextType.content.getText("java로 text를 image로 변환하기"),
+                CustomTextType.comment.getText("created by VMC")
+        );
+
+        log.info("파일 생성 완료");
+
+        // 3. 이미지 s3에 저장 -> url 얻기 (워터마크 넣기 or 이미지에 하이퍼링크 넣기)
+        String s3Path = "verification";
+        String url = s3Uploader.upload(s3Path, "originName"); // 사진 업로드
+
+        verification.setImageUrl(url);
+
+        // 4. 증명 url 생성
+
+        return verificationRepository.save(verification).getId();
     }
 
-//
-    @PostMapping("/verification/image/{verificationId}")
-    @ApiOperation(value = "image 업로드 및 수정", notes = "사용자 증명 image 업로드")
-    @Transactional
-    public Map<String, String> uploadFile(@RequestParam(value = "file", required = true) MultipartFile file,
-                                          @PathVariable String verificationId) throws IOException {
 
-        try {
-            System.out.println(file.getSize());
-            String originalFilename = file.getOriginalFilename();
-            String saveFileName = UUID.randomUUID().toString()
-                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
-
-            String s3Path = "profile";
-            String url = s3Uploader.upload(file, s3Path, saveFileName); // 사진 업로드
-
-            Optional<Verification> verification = verificationRepository.findById(verificationId);
-            if (!verification.isPresent()) {
-                s3Uploader.deletefile(verification.get().getImageUrl());
-            }
-
-//            throw new RestException(HttpStatus.NO_CONTENT, "증명 정보를 찾지 못했습니다.");
-            verification.get().setImageUrl(url);
-            verificationRepository.save(verification.get());
-
-            Map<String, String> result = new HashMap<>();
-            result.put("url", url);// 사진 url 리턴
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @GetMapping("/verification/image/{verificationId}")
-    @ApiOperation(value = "증명 image 불러오기", notes = "사용자의 증명 image 저장")
-    public String getVerificationImage(@PathVariable String verificationId) {
-        return verificationRepository.findById(verificationId).get().getImageUrl();
-    }
-
-//    @PostMapping("/verification/{verificationId}")
-//    @ApiOperation(value = "증명 url", notes = "사용자의 증명 url")
-//    public String makeTest(@RequestParam String verificationId) {
-//        Optional<Verification> verification = verificationRepository.findById(verificationId);
-//        verification.get().setUrl(verificationId);
-//        return verificationRepository.save(verification.get()).getUrl();
-//    }
-//
 //    @GetMapping("/verification")
 //    @ApiOperation(value = "증명 url", notes = "사용자의 증명 url")
 //    public String makeTest(@RequestBody List<Verification> verification) {

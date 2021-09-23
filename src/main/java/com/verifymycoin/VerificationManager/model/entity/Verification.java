@@ -2,6 +2,8 @@ package com.verifymycoin.VerificationManager.model.entity;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,6 +11,7 @@ import java.util.Date;
 
 @Document(collection = "verification")
 @Data
+@NoArgsConstructor
 public class Verification {
 
     @Id
@@ -22,7 +25,7 @@ public class Verification {
 
     private String purchaseAmount;
 
-    private Date endDate;
+    private Date endDate;       // type -> Date or String
 
     private String valuationAmount;
 

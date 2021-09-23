@@ -1,4 +1,4 @@
-package com.verifymycoin.VerificationManager.Config;
+package com.verifymycoin.VerificationManager.common.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -7,8 +7,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class S3Config {
@@ -23,6 +22,7 @@ public class S3Config {
     private String region;
 
     @Bean
+    @Primary    // 설정해줘야 bean 중복 안 됨
     public AmazonS3Client generateS3Client() {
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()

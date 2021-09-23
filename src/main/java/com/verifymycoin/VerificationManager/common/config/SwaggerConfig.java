@@ -1,4 +1,4 @@
-package com.verifymycoin.VerificationManager.Config;
+package com.verifymycoin.VerificationManager.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
