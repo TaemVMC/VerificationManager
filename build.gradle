@@ -34,9 +34,7 @@ dependencies {
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation "org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE"
-//	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.3'
-//	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.3'
-//	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.3'
+	implementation 'org.springframework.kafka:spring-kafka'
 }
 
 dependencyManagement {

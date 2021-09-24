@@ -46,5 +46,4 @@ public class Verification {
         this.startDate = startDate;
         this.purchaseAmount = purchaseAmount;
     }
-
 }

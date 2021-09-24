@@ -1,17 +1,10 @@
 package com.verifymycoin.VerificationManager.service;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Optional;
-
-import com.verifymycoin.VerificationManager.model.entity.image.CustomImage;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -21,7 +14,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class S3Uploader {
@@ -31,13 +23,18 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    private final String dirName = "verification";
+
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
-    public String upload(String dirName, String saveFileName) throws IOException {
+    public String upload() throws IOException {
         File uploadFile = convert();
-        return upload(uploadFile, dirName, saveFileName);
+        return upload(uploadFile);
     }
 
-    private String upload(File uploadFile, String dirName, String saveFileName) {
+    private String upload(File uploadFile) {
+
+        String saveFileName = UUID.randomUUID().toString();
+
         String fileName = dirName +"/" + saveFileName;
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile); // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
@@ -50,7 +47,6 @@ public class S3Uploader {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
                 .withCannedAcl(CannedAccessControlList.PublicRead)); // PublicRead 권한으로 업로드 됨
         return amazonS3Client.getUrl(bucket, fileName).toString();
-
     }
 
     private void removeNewFile(File targetFile) {
@@ -59,19 +55,6 @@ public class S3Uploader {
         } else {
             System.out.println("파일이 삭제되지 못했습니다.");
         }
-
-    }
-
-    private void removeNewFiles(File[] targetFile) {
-        for (int i = 0; i < targetFile.length; i++) {
-
-            if (targetFile[i].delete()) {
-                System.out.println("파일이 삭제되었습니다.");
-
-            } else {
-                System.out.println("파일이 삭제되지 못했습니다.");
-            }
-        }
     }
 
     public void deletefile(String file_name) {
@@ -79,24 +62,11 @@ public class S3Uploader {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, file_name));
     }
 
-    private File convert() throws IOException {
+    private File convert() {
         String userDir = System.getProperty("user.dir");
         String filePath = String.format("%s/tmp.png", userDir);
 
         File file = new File(filePath);
         return file;
     }
-
-//    private Optional<File> convert(MultipartFile file) throws IOException {
-//        File convertFile = new File(file.getOriginalFilename());
-//
-//        if(convertFile.createNewFile()) {
-//            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-//                fos.write(file.getBytes());
-//            }
-//
-//            return Optional.of(convertFile);
-//        }
-//        return Optional.empty();
-//    }
 }
