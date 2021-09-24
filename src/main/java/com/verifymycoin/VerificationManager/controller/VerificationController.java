@@ -1,15 +1,21 @@
 package com.verifymycoin.VerificationManager.controller;
 
 import com.verifymycoin.VerificationManager.model.entity.Verification;
+import com.verifymycoin.VerificationManager.model.response.Message;
+import com.verifymycoin.VerificationManager.model.response.ResponseEntity;
+import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.*;
+import java.nio.charset.Charset;
+import java.util.List;
+
 
 @RestController
 @AllArgsConstructor
@@ -20,14 +26,23 @@ public class VerificationController {
 
     @GetMapping("/verification")
     @ApiOperation(value = "증명 목록", notes = "사용자의 증명 목록")
-    public List<Verification> verificationList(@RequestHeader HttpHeaders header) {
+    public ResponseEntity<?> verificationList(@RequestHeader HttpHeaders header) {
         // jwt header의 userId
         String userId = header.getFirst("userId");
 
-        return verificationRepository.findAllByUserId(userId);
+        Message message = new Message();
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        message.setStatus(StatusEnum.OK);
+        message.setData(verificationRepository.findAllByUserId(userId));
+        message.setMessage("verification list");
+
+        return new ResponseEntity<>(message, header, HttpStatus.OK);
     }
 
-    @GetMapping("/verification")
+    @GetMapping("/verification/image")
     @ApiOperation(value = "증명 image url", notes = "증명 image url")
     public String getVerificationImageUrl(@RequestHeader HttpHeaders header) {
         // jwt header의 userId
@@ -35,6 +50,12 @@ public class VerificationController {
         String url = "";
         return url;
     }
+
+    // 증명 image 다운로드
+
+
+    // 증명 url
+
 
 //    @PostMapping("/verification")
 //    @ApiOperation(value = "증명 목록 저장", notes = "사용자의 증명 목록 저장")

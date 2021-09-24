@@ -1,6 +1,5 @@
 package com.verifymycoin.VerificationManager.service;
 
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.verifymycoin.VerificationManager.model.entity.image.CustomImage;
 import com.verifymycoin.VerificationManager.model.entity.image.CustomTextType;
 import com.verifymycoin.VerificationManager.model.request.VerificationRequest;
@@ -24,12 +23,12 @@ public class ImageGenerateService {
 
         image.converting(
                 filePath,
-                CustomTextType.title.getText("user"+ "'s Verification"),
+                CustomTextType.title.getText(verificationRequest.getUserId() + "'s Verification"),
                 CustomTextType.subtitle.getText("coin : " + verificationRequest.getCoinName()),
                 CustomTextType.content.getText("java로 text를 image로 변환하기"),
                 CustomTextType.comment.getText("created by VMC")
         );
 
-        log.info("파일 생성 완료");
+        log.info("이미지 파일 생성 완료");
     }
 }

@@ -1,8 +1,6 @@
 package com.verifymycoin.VerificationManager.service;
 
 import com.verifymycoin.VerificationManager.model.entity.Verification;
-import com.verifymycoin.VerificationManager.model.entity.image.CustomImage;
-import com.verifymycoin.VerificationManager.model.entity.image.CustomTextType;
 import com.verifymycoin.VerificationManager.model.request.VerificationRequest;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +34,7 @@ public class KafkaConsumer {
         Verification verification = new Verification();
         BeanUtils.copyProperties(verification, verificationRequest);
 
-        verification.setUserId("user");     // userId를 어디서 얻을 것인가
+        verification.setUserId(verificationRequest.getUserId());     // userId를 어디서 얻을 것인가
 
         // 2. 이미지 생성 -> service 따로 빼기
         imageGenerateService.generateImage(verificationRequest);
@@ -48,6 +46,6 @@ public class KafkaConsumer {
         // 4. 증명 url 생성
 
 
-        log.info(verificationRepository.save(verification).getId());
+        log.info("verification object id : {}", verificationRepository.save(verification).getId());
     }
 }
