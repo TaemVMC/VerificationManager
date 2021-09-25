@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = { "Kafka Test" })
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/v1/kafka")
+@RequestMapping(value = "/kafka")
 public class KafkaController {
 
     private final KafkaTemplate<String, VerificationRequest> kafkaTemplate;

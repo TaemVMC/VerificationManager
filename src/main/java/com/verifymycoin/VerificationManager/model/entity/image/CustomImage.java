@@ -3,7 +3,6 @@ package com.verifymycoin.VerificationManager.model.entity.image;
 import com.verifymycoin.VerificationManager.common.utils.ColorUtils;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.nio.Buffer;
 import java.util.Objects;
 
 import static java.awt.RenderingHints.KEY_ANTIALIASING;

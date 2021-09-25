@@ -23,7 +23,7 @@ public class KafkaConsumer {
 
     private final S3Uploader s3Uploader;
 
-    private final ImageGenerateService imageGenerateService;
+    private final ImageService imageGenerateService;
 
     // 카프카 이벤트 처리
     @KafkaListener(topics = "exam", groupId = "foo")
@@ -42,9 +42,6 @@ public class KafkaConsumer {
         // 3. 이미지 s3에 저장 -> url 얻기 (워터마크 넣기 or 이미지에 하이퍼링크 넣기)
         String url = s3Uploader.upload(); // 사진 업로드
         verification.setImageUrl(url);
-
-        // 4. 증명 url 생성
-
 
         log.info("verification object id : {}", verificationRepository.save(verification).getId());
     }
