@@ -8,19 +8,19 @@ import lombok.Getter;
 @AllArgsConstructor
 public class VerificationResponse {
 
-    private int status;
+    private int code;
     private String message;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Object data;
 
     public VerificationResponse(StatusEnum code, Object data) {
-        this.status = code.getStatus();
+        this.code = code.getCode();
         this.message = code.getMessage();
         this.data = data;
     }
 
     public VerificationResponse(StatusEnum code) {
-        this.status = code.getStatus();
+        this.code = code.getCode();
         this.message = code.getMessage();
     }
 
