@@ -4,6 +4,8 @@ import com.verifymycoin.VerificationManager.common.error.custom.InvalidImageUrlE
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundImageException;
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundUserException;
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
+import com.verifymycoin.VerificationManager.model.entity.Verification;
+import com.verifymycoin.VerificationManager.model.request.VerificationRequest;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;
 import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
@@ -17,6 +19,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Slf4j
 @Api(tags = { "증명 페이지 Controller" })
@@ -73,4 +77,16 @@ public class VerificationController {
         return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
     }
 
+    // 이미지 다시 생성
+    @PostMapping("/image")
+    @ApiOperation(value = "증명 image 생성", notes = "증명 image url이 잘못되었을 경우 다시 생성하기 위함")
+    public ResponseEntity<?> setVerificationUrl(@RequestBody @ApiParam(value = "증명서 정보", required = true) VerificationRequest verification) {
+        VerificationResponse verificationResponse = null;
+        try {
+            verificationResponse = VerificationResponse.of(StatusEnum.OK, imageService.saveImage(verification));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
+    }
 }

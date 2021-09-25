@@ -28,7 +28,7 @@ public class ImageService {
     private final VerificationRepository verificationRepository;
     private final S3Uploader s3Uploader;
 
-    public void saveImage(VerificationRequest verificationRequest) throws IOException {
+    public String saveImage(VerificationRequest verificationRequest) throws IOException {
 
         Verification verification = new Verification();
         BeanUtils.copyProperties(verification, verificationRequest);
@@ -43,6 +43,8 @@ public class ImageService {
         verification.setImageUrl(url);
 
         log.info("verification object id : {}", verificationRepository.save(verification).getId());
+
+        return url;
     }
 
     public void generateImage(VerificationRequest verificationRequest) {
@@ -103,7 +105,7 @@ public class ImageService {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         int responseCode = conn.getResponseCode();
 
-        // 만약 url이 잘못 되었다면 이미지 다시 생성 -> 저장
+        // 만약 url이 잘못 되었다면 이미지 다시 생성 -> 저장 X throw Exception
         if (responseCode != HttpURLConnection.HTTP_OK) {
             throw new InvalidImageUrlException();
         }
