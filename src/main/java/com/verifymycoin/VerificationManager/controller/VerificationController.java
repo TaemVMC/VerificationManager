@@ -1,5 +1,9 @@
 package com.verifymycoin.VerificationManager.controller;
 
+import com.verifymycoin.VerificationManager.common.error.custom.InvalidImageUrlException;
+import com.verifymycoin.VerificationManager.common.error.custom.NotFoundImageException;
+import com.verifymycoin.VerificationManager.common.error.custom.NotFoundUserException;
+import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;
 import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
@@ -12,12 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @Api(tags = { "증명 페이지 Controller" })
@@ -33,16 +32,24 @@ public class VerificationController {
     @GetMapping
     @ApiOperation(value = "증명 목록", notes = "사용자의 증명 목록")
     public ResponseEntity<?> verificationList(@RequestHeader HttpHeaders header) {
+        if (!verificationRepository.existsByUserId(header.getFirst("userId"))) {
+            throw new NotFoundUserException();
+        }
         VerificationResponse response = VerificationResponse.of(StatusEnum.OK, verificationRepository.findAllByUserId(header.getFirst("userId")));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/image/{verificationId}")
     @ApiOperation(value = "증명 image url", notes = "증명 image url")
-    public ResponseEntity<?> getVerificationImageUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) {
-        Map<String, String> result = new HashMap<>();
-        result.put("url", verificationRepository.findById(verificationId).get().getImageUrl());
-        VerificationResponse response = VerificationResponse.of(StatusEnum.OK, result);
+    public ResponseEntity<?> getVerificationImageUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) throws Exception {
+        VerificationResponse response = null;
+        try {
+            response = VerificationResponse.of(StatusEnum.OK, imageService.getImageUrl(verificationId));
+        } catch (NotFoundVerificationException e) {
+            throw new NotFoundVerificationException();
+        } catch (InvalidImageUrlException e) {
+            throw new InvalidImageUrlException();
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -54,7 +61,7 @@ public class VerificationController {
             VerificationResponse verificationResponse =  VerificationResponse.of(StatusEnum.OK, imageService.downloadImage(verificationRepository.findById(verificationId).get().getImageUrl()));
             return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            throw new NotFoundImageException();
         }
     }
 

@@ -25,7 +25,7 @@ public class S3Uploader {
     private final String dirName = "verification";
 
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
-    public String upload() throws IOException {
+    public String upload() {
         File uploadFile = convert();
         return upload(uploadFile);
     }

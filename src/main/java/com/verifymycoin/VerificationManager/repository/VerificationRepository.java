@@ -4,8 +4,11 @@ import com.verifymycoin.VerificationManager.model.entity.Verification;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface VerificationRepository extends MongoRepository<Verification, String> {
 
-    List<Verification> findAllByUserId(String userId);
+    Optional<List<Verification>> findAllByUserId(String userId);
+
+    boolean existsByUserId(String userId);
 }

@@ -23,7 +23,7 @@ public class KafkaConsumer {
 
     private final S3Uploader s3Uploader;
 
-    private final ImageService imageGenerateService;
+    private final ImageService imageService;
 
     // 카프카 이벤트 처리
     @KafkaListener(topics = "exam", groupId = "foo")
@@ -31,18 +31,6 @@ public class KafkaConsumer {
             @Payload VerificationRequest verificationRequest,
             @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) throws IOException {
 
-        Verification verification = new Verification();
-        BeanUtils.copyProperties(verification, verificationRequest);
-
-        verification.setUserId(verificationRequest.getUserId());     // userId를 어디서 얻을 것인가
-
-        // 2. 이미지 생성 -> service 따로 빼기
-        imageGenerateService.generateImage(verificationRequest);
-
-        // 3. 이미지 s3에 저장 -> url 얻기 (워터마크 넣기 or 이미지에 하이퍼링크 넣기)
-        String url = s3Uploader.upload(); // 사진 업로드
-        verification.setImageUrl(url);
-
-        log.info("verification object id : {}", verificationRepository.save(verification).getId());
+        imageService.saveImage(verificationRequest);
     }
 }
