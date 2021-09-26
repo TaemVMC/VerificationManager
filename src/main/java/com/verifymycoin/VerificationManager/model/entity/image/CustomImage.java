@@ -4,7 +4,6 @@ import com.verifymycoin.VerificationManager.common.utils.ColorUtils;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,7 +33,7 @@ public class CustomImage {
         this.startHeight = margin;
     }
 
-    public void converting(String filePath, CustomText... customTexts) {
+    public BufferedImage converting(CustomText... customTexts) {
         if (customTexts == null || customTexts.length == 0) {
             throw new RuntimeException("text 를 입력해 주세요.");
         }
@@ -43,12 +42,14 @@ public class CustomImage {
         for (CustomText customText : customTexts) {
             this.draw(image, customText);
         }
-        try (OutputStream os = new FileOutputStream(new File(filePath))) {
-            ImageIO.write(image, "png", os);
+//        try (OutputStream os = new FileOutputStream(new File(filePath))) {
+//            ImageIO.write(image, "png", os);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        return image;
     }
 
     private BufferedImage getBufferedImage() {

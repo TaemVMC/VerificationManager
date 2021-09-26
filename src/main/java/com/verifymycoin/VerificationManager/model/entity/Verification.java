@@ -1,13 +1,15 @@
 package com.verifymycoin.VerificationManager.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@Document(collection = "verification")
+@Document(collection = "verifications")
 @Data
 @NoArgsConstructor
 public class Verification {
@@ -17,23 +19,21 @@ public class Verification {
 
     private String userId;
 
-    private String coinName;
+    private String exchangeName;    // 거래소명
 
-    private Date startDate;
+    private String startDate;         // 조회 시작일
 
-    private String purchaseAmount;
+    private String endDate;           // 조회 종료일
 
-    private Date endDate;       // type -> Date or String
+    private String orderCurrency;   // 코인
 
-    private String valuationAmount;
+    private String paymentCurrency; // 주문통화
 
-    private String sold;
+    private String units;           // 보유 코인 개수 (조회 종료 시점)
 
-    private String earningRate;
+    private String profit;           // 수익실현금액
 
-    private String revenue;
-
-    private String url;
+    private String avarageCost;     // 평단가
 
     private String imageUrl;
 }

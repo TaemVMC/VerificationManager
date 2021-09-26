@@ -1,34 +1,31 @@
 package com.verifymycoin.VerificationManager.controller;
 
-import com.verifymycoin.VerificationManager.model.request.VerificationRequest;
+import com.verifymycoin.VerificationManager.model.entity.Verification;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @Api(tags = { "Kafka Test" })
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping(value = "/kafka")
 public class KafkaController {
 
-    private final KafkaTemplate<String, VerificationRequest> kafkaTemplate;
+    private final KafkaTemplate<Object, Verification> kafkaTemplate;
 
-    private static final String TOPIC = "exam";
+    private static final String TOPIC = "transactionSummary";
 
     @ApiOperation(value = "메시지 전송", notes = "Kafka 메시지 전송")
-    @PostMapping("/{coinName}")
-    public String sendMessage(@PathVariable("coinName") String coinName) {
-        VerificationRequest verificationRequest = new VerificationRequest();
-        verificationRequest.setCoinName(coinName);
-        verificationRequest.setEarningRate("17.4");
-        verificationRequest.setRevenue("190000");
-        verificationRequest.setSold("F");
+    @PostMapping
+    public String sendMessage(@RequestBody Verification verification) {
 
-        kafkaTemplate.send(TOPIC, verificationRequest);
+        kafkaTemplate.send(TOPIC, verification);
 
-        System.out.println(verificationRequest);
+        log.info("kafka send verification 객체 : {}", verification);
         return "success";
     }
 }

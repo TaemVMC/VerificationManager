@@ -5,7 +5,6 @@ import com.verifymycoin.VerificationManager.common.error.custom.NotFoundImageExc
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundUserException;
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
 import com.verifymycoin.VerificationManager.model.entity.Verification;
-import com.verifymycoin.VerificationManager.model.request.VerificationRequest;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;
 import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
@@ -80,7 +79,7 @@ public class VerificationController {
     // 이미지 다시 생성
     @PostMapping("/image")
     @ApiOperation(value = "증명 image 생성", notes = "증명 image url이 잘못되었을 경우 다시 생성하기 위함")
-    public ResponseEntity<?> setVerificationUrl(@RequestBody @ApiParam(value = "증명서 정보", required = true) VerificationRequest verification) {
+    public ResponseEntity<?> setVerificationUrl(@RequestBody @ApiParam(value = "증명서 정보", required = true) Verification verification) {
         VerificationResponse verificationResponse = null;
         try {
             verificationResponse = VerificationResponse.of(StatusEnum.OK, imageService.saveImage(verification));

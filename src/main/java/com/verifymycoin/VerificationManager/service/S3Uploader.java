@@ -1,8 +1,9 @@
 package com.verifymycoin.VerificationManager.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.UUID;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
@@ -50,14 +52,14 @@ public class S3Uploader {
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
-            System.out.println("파일이 삭제되었습니다.");
+            log.info("파일 삭제 완료");
         } else {
-            System.out.println("파일이 삭제되지 못했습니다.");
+           log.info("파일 삭제 실패");
         }
     }
 
     public void deletefile(String file_name) {
-        System.out.println(file_name);
+        log.info("bucket deleteFile : {}", file_name);
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, file_name));
     }
 

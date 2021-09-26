@@ -1,11 +1,8 @@
 package com.verifymycoin.VerificationManager.service;
 
 import com.verifymycoin.VerificationManager.model.entity.Verification;
-import com.verifymycoin.VerificationManager.model.request.VerificationRequest;
-import com.verifymycoin.VerificationManager.repository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -19,16 +16,12 @@ import java.io.IOException;
 @Slf4j
 public class KafkaConsumer {
 
-    private final VerificationRepository verificationRepository;
-
-    private final S3Uploader s3Uploader;
-
     private final ImageService imageService;
 
     // 카프카 이벤트 처리
-    @KafkaListener(topics = "exam", groupId = "foo")
+    @KafkaListener(topics = "transactionSummary")
     public void consume(
-            @Payload VerificationRequest verificationRequest,
+            @Payload Verification verificationRequest,
             @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) throws IOException {
 
         imageService.saveImage(verificationRequest);

@@ -1,12 +1,11 @@
 package com.verifymycoin.VerificationManager.common.config;
 
-import com.verifymycoin.VerificationManager.model.request.VerificationRequest;
+import com.verifymycoin.VerificationManager.model.entity.Verification;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.HashMap;
@@ -22,10 +21,5 @@ public class KafkaProducerConfig {
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, org.springframework.kafka.support.serializer.JsonSerializer.class);
         return new DefaultKafkaProducerFactory(config);
-    }
-
-    @Bean
-    public KafkaTemplate<String, VerificationRequest> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
     }
 }
