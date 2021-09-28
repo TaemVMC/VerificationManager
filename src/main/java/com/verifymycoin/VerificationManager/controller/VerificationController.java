@@ -43,7 +43,7 @@ public class VerificationController {
     }
 
     @GetMapping("/image/{verificationId}")
-    @ApiOperation(value = "증명 image url", notes = "증명 image url")
+    @ApiOperation(value = "증명서 image url", notes = "증명서 image url")
     public ResponseEntity<?> getVerificationImageUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) throws Exception {
         VerificationResponse response = null;
         try {
@@ -58,7 +58,7 @@ public class VerificationController {
 
     // 증명 image 다운로드
     @GetMapping("/image/download/{verificationId}")
-    @ApiOperation(value = "증명 image 다운로드", notes = "증명 image url")
+    @ApiOperation(value = "증명서 image 다운로드", notes = "증명서 image 다운로드")
     public ResponseEntity<?> getVerificationImage(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true) String verificationId) {
         try {
             VerificationResponse verificationResponse =  VerificationResponse.of(StatusEnum.OK, imageService.downloadImage(verificationRepository.findById(verificationId).get().getImageUrl()));
@@ -70,7 +70,7 @@ public class VerificationController {
 
     // 증명 url
     @GetMapping("/{verificationId}")
-    @ApiOperation(value = "증명 image url", notes = "증명 image url")
+    @ApiOperation(value = "증명서 url(상세페이지)", notes = "증명서 url(상세페이지)")
     public ResponseEntity<?> getVerificationUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) {
         VerificationResponse verificationResponse = VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId));
         return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
@@ -78,7 +78,7 @@ public class VerificationController {
 
     // 이미지 다시 생성
     @PostMapping("/image")
-    @ApiOperation(value = "증명 image 생성", notes = "증명 image url이 잘못되었을 경우 다시 생성하기 위함")
+    @ApiOperation(value = "증명 image 재생성", notes = "증명 image url이 잘못되었을 경우 다시 생성하기 위함")
     public ResponseEntity<?> resaveImageUrl(@RequestBody @ApiParam(value = "증명서 정보", required = true) Verification verification) {
         VerificationResponse verificationResponse = null;
         try {
