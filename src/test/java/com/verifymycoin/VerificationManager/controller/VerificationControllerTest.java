@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -53,26 +54,27 @@ class VerificationControllerTest {
                 .build();
     }
 
+    Verification verification =
+            Verification.builder()
+                    .id("615309291fc2f34655124587")
+                    .userId("test")
+                    .exchangeName("Bithumb")
+                    .startDate("2021-01-01")
+                    .endDate("2021-01-10")
+                    .orderCurrency("OMG")
+                    .paymentCurrency("KRW")
+                    .units("10.55")
+                    .profit("-10000")
+                    .avarageCost("17.000")
+                    .build();
+
     @Test
     @DisplayName("사용자의 증명서 목록")
     void verificationList() throws Exception {
         // given
         List<Verification> verifications = new ArrayList<>();
-        verifications
-                .add (
-                        Verification.builder()
-                                .id("615309291fc2f34655124587")
-                                .userId("test")
-                                .exchangeName("Bithumb")
-                                .startDate("2021-01-01")
-                                .endDate("2021-01-10")
-                                .orderCurrency("OMG")
-                                .paymentCurrency("KRW")
-                                .units("10.55")
-                                .profit("-10000")
-                                .avarageCost("17.000")
-                                .build()
-                );
+        verifications.add(verification);
+
         Optional<List<Verification>> op = Optional.of(verifications);
         System.out.println(op.get());
         given(verificationRepository.findAllByUserId(any()))
@@ -89,6 +91,9 @@ class VerificationControllerTest {
         )
         .andDo(print())
         .andExpect(status().isOk());
+
+        verify(verificationRepository).findAllByUserId("test");
+        verify(verificationRepository).existsByUserId("test");
     }
 
     @Test
@@ -118,19 +123,6 @@ class VerificationControllerTest {
     void getVerificationImage() throws Exception {
         // given
         String id = "615309291fc2f34655124587";
-        Verification verification =
-                        Verification.builder()
-                                .id("615309291fc2f34655124587")
-                                .userId("test")
-                                .exchangeName("Bithumb")
-                                .startDate("2021-01-01")
-                                .endDate("2021-01-10")
-                                .orderCurrency("OMG")
-                                .paymentCurrency("KRW")
-                                .units("10.55")
-                                .profit("-10000")
-                                .avarageCost("17.000")
-                                .build();
 
         Optional<Verification> op = Optional.of(verification);
         given(verificationRepository.findById("615309291fc2f34655124587"))
@@ -158,19 +150,6 @@ class VerificationControllerTest {
     void getVerificationUrl() throws Exception {
         // given
         String id = "615309291fc2f34655124587";
-        Verification verification =
-                Verification.builder()
-                        .id("615309291fc2f34655124587")
-                        .userId("test")
-                        .exchangeName("Bithumb")
-                        .startDate("2021-01-01")
-                        .endDate("2021-01-10")
-                        .orderCurrency("OMG")
-                        .paymentCurrency("KRW")
-                        .units("10.55")
-                        .profit("-10000")
-                        .avarageCost("17.000")
-                        .build();
 
         Optional<Verification> op = Optional.of(verification);
         given(verificationRepository.findById("615309291fc2f34655124587"))
@@ -195,20 +174,6 @@ class VerificationControllerTest {
     @Test
     @DisplayName("증명 image 재생성")
     void resaveImageUrl() throws Exception {
-        Verification verification =
-                Verification.builder()
-                        .id("615309291fc2f34655124587")
-                        .userId("test")
-                        .exchangeName("Bithumb")
-                        .startDate("2021-01-01")
-                        .endDate("2021-01-10")
-                        .orderCurrency("OMG")
-                        .paymentCurrency("KRW")
-                        .units("10.55")
-                        .profit("-10000")
-                        .avarageCost("17.000")
-                        .build();
-
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put("dir", "D:/vmc/VMC_21-09-29T012616.png");
         given(imageService.saveImage(verification))
