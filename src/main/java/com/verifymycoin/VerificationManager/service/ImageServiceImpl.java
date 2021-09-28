@@ -71,13 +71,15 @@ public class ImageServiceImpl implements ImageService {
         BufferedImage resultImage = image.converting(
 //                    filePath,
                     CustomTextType.title.getText(verification.getUserId() + "'s Verification"),
-                    CustomTextType.subtitle.getText("coin : " + verification.getOrderCurrency()),
-                    CustomTextType.content.getText("java로 text를 image로 변환하기"),
+                    CustomTextType.subtitle.getText("코인 \t: " + verification.getOrderCurrency() + "\t" + verification.getStartDate() + " ~ " + verification.getEndDate()),
+                    CustomTextType.subtitle.getText("거래소명 \t: " + verification.getExchangeName()),
+                    CustomTextType.subtitle.getText("보유 코인 개수 \t: " + verification.getUnits()),
+                    CustomTextType.subtitle.getText("수익 실현 금액 \t: " + verification.getProfit()),
+                    CustomTextType.subtitle.getText("평단가 \t: " + verification.getAvarageCost()),
+                    CustomTextType.subtitle.getText("주문 통화 \t: " + verification.getPaymentCurrency()),
                     CustomTextType.comment.getText("created by VMC")
         );
-
         writeWatermark(resultImage);
-
 //        log.info("이미지 파일 생성 완료");
     }
 
@@ -104,22 +106,21 @@ public class ImageServiceImpl implements ImageService {
             Rectangle size = fontGV.getPixelBounds(g2d.getFontRenderContext(), 0, 0);
             Shape textShape = fontGV.getOutline();
             double textWidth = size.getWidth();
-            double textHeight = size.getHeight()*3; // 텍스트 간격
+            double textHeight = size.getHeight() * 5; // 텍스트 간격
             AffineTransform rotate45 = AffineTransform.getRotateInstance(Math.PI / 5d);
             Shape rotatedText = rotate45.createTransformedShape(textShape);
 
             // use a gradient that repeats 4 times
             g2d.setPaint(new GradientPaint(0, 0,
-                    new Color(0f, 0f, 0f, 0.1f),
+                    new Color(0f, 0f, 0f, 0.05f),
                     sourceImage.getWidth() / 2, sourceImage.getHeight() / 2,
-                    new Color(0f, 0f, 0f, 0.1f)));
+                    new Color(0f, 0f, 0f, 0.05f)));
 
             g2d.setStroke(new BasicStroke(1f));
 
             double yStep = Math.sqrt(textWidth * textWidth / 2); //
-            System.out.println("yStep : " + yStep);
 
-            for (double x = -textHeight; x < sourceImage.getWidth()/2; x += textHeight) {
+            for (double x = -textHeight; x < sourceImage.getWidth() / 2; x += textHeight) {
                 double y = -yStep;
 
                 for (; y < sourceImage.getHeight(); y += yStep) {

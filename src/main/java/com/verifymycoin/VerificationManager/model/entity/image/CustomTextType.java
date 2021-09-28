@@ -41,7 +41,7 @@ public enum CustomTextType {
             return CustomText.builder()
                     .text(text)
                     .fontFamily("나눔고딕")
-                    .fontColor("#B2ACE6")
+                    .fontColor("#282359")
                     .fontSize(12)
                     .build();
         }

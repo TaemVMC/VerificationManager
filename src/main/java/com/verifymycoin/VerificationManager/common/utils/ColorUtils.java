@@ -6,6 +6,7 @@ import java.awt.*;
 
 @UtilityClass
 public class ColorUtils {
+
     public Color getColor(String textColor) {
         if (textColor == null || textColor.length() != 7) {
             throw new RuntimeException("배경색을 입력해 주세요.");
