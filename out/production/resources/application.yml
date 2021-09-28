@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/admin
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAX5JJUNOU6P4RFWUZ
+      secretKey: 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
+    s3:
+      bucket: vmc-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
