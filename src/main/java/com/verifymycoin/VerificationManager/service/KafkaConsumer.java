@@ -16,7 +16,7 @@ import java.io.IOException;
 @Slf4j
 public class KafkaConsumer {
 
-    private final ImageService imageService;
+    private final ImageServiceImpl imageService;
 
     // 카프카 이벤트 처리
     @KafkaListener(topics = "transactionSummary")

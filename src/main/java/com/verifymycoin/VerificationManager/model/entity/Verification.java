@@ -1,6 +1,7 @@
 package com.verifymycoin.VerificationManager.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -12,6 +13,7 @@ import java.util.Date;
 @Document(collection = "verifications")
 @Data
 @NoArgsConstructor
+@Builder
 public class Verification {
 
     @Id

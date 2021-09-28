@@ -24,7 +24,7 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final String dirName = "verification";
+    private final String BUCKETDIR = "verification";
 
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
     public String upload() {
@@ -36,7 +36,7 @@ public class S3Uploader {
 
         String saveFileName = UUID.randomUUID().toString();
 
-        String fileName = dirName +"/" + saveFileName;
+        String fileName = BUCKETDIR +"/" + saveFileName;
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile); // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
 

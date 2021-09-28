@@ -8,7 +8,7 @@ import com.verifymycoin.VerificationManager.model.entity.Verification;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;
 import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
-import com.verifymycoin.VerificationManager.service.ImageService;
+import com.verifymycoin.VerificationManager.service.ImageServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -30,10 +30,10 @@ public class VerificationController {
 
     private final VerificationRepository verificationRepository;
 
-    private final ImageService imageService;
+    private final ImageServiceImpl imageService;
 
     @GetMapping
-    @ApiOperation(value = "증명 목록", notes = "사용자의 증명 목록")
+    @ApiOperation(value = "증명 목록", notes = "사용자의 증명서 목록")
     public ResponseEntity<?> verificationList(@RequestHeader HttpHeaders header) {
         if (!verificationRepository.existsByUserId(header.getFirst("userId"))) {
             throw new NotFoundUserException();
@@ -79,7 +79,7 @@ public class VerificationController {
     // 이미지 다시 생성
     @PostMapping("/image")
     @ApiOperation(value = "증명 image 생성", notes = "증명 image url이 잘못되었을 경우 다시 생성하기 위함")
-    public ResponseEntity<?> setVerificationUrl(@RequestBody @ApiParam(value = "증명서 정보", required = true) Verification verification) {
+    public ResponseEntity<?> resaveImageUrl(@RequestBody @ApiParam(value = "증명서 정보", required = true) Verification verification) {
         VerificationResponse verificationResponse = null;
         try {
             verificationResponse = VerificationResponse.of(StatusEnum.OK, imageService.saveImage(verification));
