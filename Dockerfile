@@ -7,7 +7,7 @@ CMD ["java", "-jar", "app.jar"]
 FROM openjdk:11 AS builder
 WORKDIR /app
 COPY . /app
-RUN ./gradlew clean build -x test
+RUN ./gradlew clean build
 
 
 FROM builder AS development
