@@ -4,7 +4,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/admin
+      uri: mongodb://13.209.68.198/test
   jackson:
     property-naming-strategy: SNAKE_CASE
   kafka:

@@ -35,8 +35,8 @@ public class VerificationController {
     @GetMapping
     @ApiOperation(value = "증명 목록", notes = "사용자의 증명서 목록")
     public ResponseEntity<?> verificationList(@RequestHeader HttpHeaders header) {
-        if (!verificationRepository.existsByUserId(header.getFirst("userId"))) {
-            throw new NotFoundUserException();
+        if (!verificationRepository.existsByUserId(header.getFirst("userId"))) {    // 해당 userId 에 해당하는 증명서가 없다면 증명서를 찾을 수 없다는 에러
+            throw new NotFoundVerificationException();
         }
         VerificationResponse response = VerificationResponse.of(StatusEnum.OK, verificationRepository.findAllByUserId(header.getFirst("userId")));
         return new ResponseEntity<>(response, HttpStatus.OK);
