@@ -7,6 +7,11 @@ spring:
       uri: mongodb://13.209.68.198:27017/VerificationManager
   jackson:
     property-naming-strategy: SNAKE_CASE
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 cloud:
   aws:
