@@ -2,7 +2,6 @@ package com.verifymycoin.VerificationManager.controller;
 
 import com.verifymycoin.VerificationManager.common.error.custom.InvalidImageUrlException;
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundImageException;
-import com.verifymycoin.VerificationManager.common.error.custom.NotFoundUserException;
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
 import com.verifymycoin.VerificationManager.model.entity.Verification;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;

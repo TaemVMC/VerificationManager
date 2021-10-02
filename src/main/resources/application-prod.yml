@@ -4,9 +4,13 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://3.37.127.25:27017/VerificationManager
+      uri: mongodb://3.37.127.25/verificationManager
   jackson:
     property-naming-strategy: SNAKE_CASE
+  kafka:
+    bootstrap-servers: 3.37.127.25:9092
+    consumer:
+      group-id: team-vmc
 
 cloud:
   aws:
