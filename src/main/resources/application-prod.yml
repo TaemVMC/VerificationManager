@@ -4,7 +4,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://3.37.127.25/verificationManager
+      uri: mongodb://3.37.127.25/VerificationManager
   jackson:
     property-naming-strategy: SNAKE_CASE
   kafka:
