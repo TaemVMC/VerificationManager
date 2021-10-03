@@ -71,7 +71,7 @@ public class ImageServiceImpl implements ImageService {
         BufferedImage resultImage = image.converting(
 //                    filePath,
                     CustomTextType.title.getText(verification.getUserId() + "'s Verification"),
-                    CustomTextType.subtitle.getText("코인              \t " + verification.getOrderCurrency() + "\t         기간 : ~ " + verification.getEndDate()),
+                    CustomTextType.subtitle.getText("코인              \t " + verification.getOrderCurrency() + "\t         기간  ~ " + verification.getEndDate()),
                     CustomTextType.subtitle.getText("거래소명           \t " + verification.getExchangeName()),
                     CustomTextType.subtitle.getText("수익 실현 금액     \t " + verification.getProfit() + " " + verification.getPaymentCurrency()),
                     CustomTextType.subtitle.getText("수익률              \t " + verification.getYield() + "%"),
