@@ -24,6 +24,7 @@ public class KafkaConsumer {
             @Payload Verification verificationRequest,
             @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) throws IOException {
 
+        log.info("event listen : {}", verificationRequest);
         imageService.saveImage(verificationRequest);
     }
 }

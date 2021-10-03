@@ -64,18 +64,18 @@ public class ImageServiceImpl implements ImageService {
 
         CustomImage image = CustomImage.builder()
                 .imageWidth(600)
-                .imageHeight(400)
+                .imageHeight(350)
                 .imageColor("#C3D8E6")
                 .build();
 
         BufferedImage resultImage = image.converting(
 //                    filePath,
                     CustomTextType.title.getText(verification.getUserId() + "'s Verification"),
-                    CustomTextType.subtitle.getText("코인 \t: " + verification.getOrderCurrency() + "\t ~ " + verification.getEndDate()),
-                    CustomTextType.subtitle.getText("거래소명 \t: " + verification.getExchangeName()),
-                    CustomTextType.subtitle.getText("주문 통화 \t: " + verification.getPaymentCurrency()),
-                    CustomTextType.subtitle.getText("수익 실현 금액 \t: " + verification.getProfit()),
-                    CustomTextType.subtitle.getText("수익률 \t: " + verification.getYield()),
+                    CustomTextType.subtitle.getText("코인                 \t " + verification.getOrderCurrency() + "\t         기간: ~ " + verification.getEndDate()),
+                    CustomTextType.subtitle.getText("거래소명           \t " + verification.getExchangeName()),
+                    CustomTextType.subtitle.getText("수익 실현 금액  \t " + verification.getProfit() + " " + verification.getPaymentCurrency()),
+                    CustomTextType.subtitle.getText("수익률              \t " + verification.getYield() + "%"),
+                    CustomTextType.subtitle.getText("  "),
                     CustomTextType.comment.getText("created by VMC")
         );
         writeWatermark(resultImage);
@@ -88,7 +88,7 @@ public class ImageServiceImpl implements ImageService {
         String strWText = "VERIFY MY COIN - VMC";
         String userDir = System.getProperty("user.dir");;
         String filePath = String.format("%s/tmp.png", userDir);
-        log.info("생성될 파일 : {}", filePath);
+        log.debug("생성될 파일 : {}", filePath);
 
         try {
             Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
@@ -134,7 +134,7 @@ public class ImageServiceImpl implements ImageService {
                 ImageIO.write(sourceImage, "png", os);
             }
             g2d.dispose();
-            log.info("이미지 파일 저장 완료");
+            log.debug("이미지 파일 저장 완료");
 
         } catch (IOException ex) {
             System.err.println(ex);
@@ -164,7 +164,7 @@ public class ImageServiceImpl implements ImageService {
             IOUtil.writeFile(is, os);
 
             conn.disconnect();
-            log.info("이미지 파일 다운로드 완료");
+            log.debug("이미지 파일 다운로드 완료");
         } catch (Exception e) {
             log.error("An error occurred while trying to download a file.");
             throw new NotFoundImageException();
