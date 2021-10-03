@@ -71,12 +71,11 @@ public class ImageServiceImpl implements ImageService {
         BufferedImage resultImage = image.converting(
 //                    filePath,
                     CustomTextType.title.getText(verification.getUserId() + "'s Verification"),
-                    CustomTextType.subtitle.getText("코인 \t: " + verification.getOrderCurrency() + "\t" + verification.getStartDate() + " ~ " + verification.getEndDate()),
+                    CustomTextType.subtitle.getText("코인 \t: " + verification.getOrderCurrency() + "\t ~ " + verification.getEndDate()),
                     CustomTextType.subtitle.getText("거래소명 \t: " + verification.getExchangeName()),
-                    CustomTextType.subtitle.getText("보유 코인 개수 \t: " + verification.getUnits()),
-                    CustomTextType.subtitle.getText("수익 실현 금액 \t: " + verification.getProfit()),
-                    CustomTextType.subtitle.getText("평단가 \t: " + verification.getAvarageCost()),
                     CustomTextType.subtitle.getText("주문 통화 \t: " + verification.getPaymentCurrency()),
+                    CustomTextType.subtitle.getText("수익 실현 금액 \t: " + verification.getProfit()),
+                    CustomTextType.subtitle.getText("수익률 \t: " + verification.getYield()),
                     CustomTextType.comment.getText("created by VMC")
         );
         writeWatermark(resultImage);
