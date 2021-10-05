@@ -191,12 +191,13 @@ public class ImageServiceImpl implements ImageService {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         int responseCode = conn.getResponseCode();
 
-        // 만약 url이 잘못 되었다면 이미지 다시 생성 -> 저장 X throw Exception
+        // 만약 url이 잘못 되었다면 이미지 다시 생성
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new InvalidImageUrlException();
+//            throw new InvalidImageUrlException();
+            resultMap.put("url", saveImage(verification));
+        } else {
+            resultMap.put("url", verification.getImageUrl());
         }
-
-        resultMap.put("url", verification.getImageUrl());
         return resultMap;
     }
 }

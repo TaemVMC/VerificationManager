@@ -76,15 +76,15 @@ public class VerificationController {
     }
 
     // 이미지 다시 생성
-    @PostMapping("/image")
-    @ApiOperation(value = "증명 image 재생성", notes = "증명 image url이 잘못되었을 경우 다시 생성하기 위함")
-    public ResponseEntity<?> resaveImageUrl(@RequestBody @ApiParam(value = "증명서 정보", required = true) Verification verification) {
-        VerificationResponse verificationResponse = null;
-        try {
-            verificationResponse = VerificationResponse.of(StatusEnum.OK, imageService.saveImage(verification));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
-    }
+//    @PostMapping("/image")
+//    @ApiOperation(value = "증명 image 재생성", notes = "증명 image url이 잘못되었을 경우 다시 생성하기 위함")
+//    public ResponseEntity<?> resaveImageUrl(@RequestBody @ApiParam(value = "증명서 정보", required = true) Verification verification) {
+//        VerificationResponse verificationResponse = null;
+//        try {
+//            verificationResponse = VerificationResponse.of(StatusEnum.OK, imageService.saveImage(verification));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
+//    }
 }
