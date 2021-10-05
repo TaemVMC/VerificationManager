@@ -11,4 +11,6 @@ public interface VerificationRepository extends MongoRepository<Verification, St
     Optional<List<Verification>> findAllByUserId(String userId);
 
     boolean existsByUserId(String userId);
+
+    void deleteAllByUserId(String userId);
 }
