@@ -24,8 +24,8 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConsumerFactory consumerFactory() {
-        JsonDeserializer<Verification> deserializer = new JsonDeserializer<>(Verification.class);
-        deserializer.addTrustedPackages("*");
+        JsonDeserializer<Verification> deserializer = new JsonDeserializer<>(Verification.class, false);
+//         deserializer.addTrustedPackages("*");
 
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
