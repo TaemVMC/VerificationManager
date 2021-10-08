@@ -6,6 +6,7 @@ import com.verifymycoin.VerificationManager.model.entity.image.CustomTextType;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -24,6 +25,9 @@ public class ImageServiceImpl implements ImageService {
     private final VerificationRepository verificationRepository;
     private final S3Uploader s3Uploader;
 
+    @Value("${verification.redirect-url}")
+    private String redirectUrl;
+
     /**
      *
      * @param verification
@@ -40,6 +44,9 @@ public class ImageServiceImpl implements ImageService {
         List<String> url = s3Uploader.upload(); // 사진 업로드
         verification.setImageUrl(url.get(0));
         verification.setImageDownloadUrl(url.get(1));
+
+        String id = verificationRepository.save(verification).getId();
+        verification.setCertificationUrl(redirectUrl + id);
 
         log.info("verification object id : {}", verificationRepository.save(verification).getId());
         return url.get(0);

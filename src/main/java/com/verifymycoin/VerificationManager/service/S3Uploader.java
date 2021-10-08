@@ -32,7 +32,6 @@ public class S3Uploader {
 
     private final String BUCKETDIR = "verification";
 
-    // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
     public List<String> upload() throws IOException {
         String userDir = System.getProperty("user.dir");
         String filePath = String.format("%s/tmp.png", userDir);
@@ -76,11 +75,7 @@ public class S3Uploader {
     }
 
     private void removeNewFile(File targetFile) {
-        if (targetFile.delete()) {
-            log.info("파일 삭제 완료");
-        } else {
-           log.info("파일 삭제 실패");
-        }
+        targetFile.delete();
     }
 
     public void deletefile(String file_name) {
