@@ -1,16 +1,11 @@
 package com.verifymycoin.VerificationManager.service;
 
-import com.verifymycoin.VerificationManager.common.error.custom.InvalidImageUrlException;
-import com.verifymycoin.VerificationManager.common.error.custom.NotFoundImageException;
-import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
-import com.verifymycoin.VerificationManager.common.utils.IOUtil;
 import com.verifymycoin.VerificationManager.model.entity.Verification;
 import com.verifymycoin.VerificationManager.model.entity.image.CustomImage;
 import com.verifymycoin.VerificationManager.model.entity.image.CustomTextType;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -19,11 +14,7 @@ import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -173,31 +164,6 @@ public class ImageServiceImpl implements ImageService {
 //        }
 //        Map<String, String> resultMap = new HashMap<>();
 //        resultMap.put("dir", outputDir + fileName);
-//        return resultMap;
-//    }
-
-//    /**
-//     *
-//     * @param verificationId
-//     * @return verificationId에 매치되는 url 반환
-//     * @throws Exception
-//     */
-//    @Override
-//    public Map<String, String> getImageUrl(String verificationId) throws Exception {
-//        Map<String, String> resultMap = new HashMap<>();
-//        Verification verification = verificationRepository.findById(verificationId).orElseThrow(() -> new NotFoundVerificationException());
-//
-//        URL url = new URL(verification.getImageUrl());
-//        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//        int responseCode = conn.getResponseCode();
-//
-//        // 만약 url이 잘못 되었다면 이미지 다시 생성
-//        if (responseCode != HttpURLConnection.HTTP_OK) {
-////            throw new InvalidImageUrlException();
-//            resultMap.put("url", saveImage(verification));
-//        } else {
-//            resultMap.put("url", verification.getImageUrl());
-//        }
 //        return resultMap;
 //    }
 }

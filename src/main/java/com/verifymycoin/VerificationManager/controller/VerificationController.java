@@ -1,13 +1,9 @@
 package com.verifymycoin.VerificationManager.controller;
 
-import com.verifymycoin.VerificationManager.common.error.custom.InvalidImageUrlException;
-import com.verifymycoin.VerificationManager.common.error.custom.NotFoundImageException;
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
-import com.verifymycoin.VerificationManager.model.entity.Verification;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;
 import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
-import com.verifymycoin.VerificationManager.service.ImageServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -18,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 
 @Slf4j
 @Api(tags = { "증명 페이지 Controller" })
@@ -28,8 +23,6 @@ import java.io.IOException;
 public class VerificationController {
 
     private final VerificationRepository verificationRepository;
-
-    private final ImageServiceImpl imageService;
 
     @GetMapping
     @ApiOperation(value = "증명 목록", notes = "사용자의 증명서 목록")
@@ -55,17 +48,17 @@ public class VerificationController {
 //        return new ResponseEntity<>(response, HttpStatus.OK);
 //    }
 
-    // 증명 image 다운로드
-    @GetMapping("/image/download/{verificationId}")
-    @ApiOperation(value = "증명서 image 다운로드", notes = "증명서 image 다운로드")
-    public ResponseEntity<?> getVerificationImage(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true) String verificationId) {
-        try {
-            VerificationResponse verificationResponse =  VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId).get().getImageDownloadUrl());
-            return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new NotFoundImageException();
-        }
-    }
+//    // 증명 image 다운로드
+//    @GetMapping("/image/download/{verificationId}")
+//    @ApiOperation(value = "증명서 image 다운로드", notes = "증명서 image 다운로드")
+//    public ResponseEntity<?> getVerificationImage(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true) String verificationId) {
+//        try {
+//            VerificationResponse verificationResponse =  VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId).get().getImageDownloadUrl());
+//            return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
+//        } catch (Exception e) {
+//            throw new NotFoundImageException();
+//        }
+//    }
 
     // 증명 url
     @GetMapping("/{verificationId}")
