@@ -10,6 +10,7 @@ import com.verifymycoin.VerificationManager.model.entity.image.CustomTextType;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -21,6 +22,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -44,12 +46,12 @@ public class ImageServiceImpl implements ImageService {
         generateImage(verification);
 
         // 3. 이미지 s3에 저장 -> url 얻기 (워터마크 넣기 or 이미지에 하이퍼링크 넣기)
-        String url = s3Uploader.upload(); // 사진 업로드
-        verification.setImageUrl(url);
-
+        List<String> url = s3Uploader.upload(); // 사진 업로드
+        verification.setImageUrl(url.get(0));
+        verification.setImageDownloadUrl(url.get(1));
 
         log.info("verification object id : {}", verificationRepository.save(verification).getId());
-        return url;
+        return url.get(0);
     }
 
     /**
@@ -58,8 +60,6 @@ public class ImageServiceImpl implements ImageService {
      */
     @Override
     public void generateImage(Verification verification) {
-//        String userDir = System.getProperty("user.dir");;
-//        String filePath = String.format("%s/tmp.png", userDir);
 //        log.info("생성될 파일 : {}", filePath);
 
         CustomImage image = CustomImage.builder()
@@ -70,13 +70,13 @@ public class ImageServiceImpl implements ImageService {
 
         BufferedImage resultImage = image.converting(
 //                    filePath,
-                    CustomTextType.title.getText(verification.getUserId() + "'s Verification"),
-                    CustomTextType.subtitle.getText("코인              \t " + verification.getOrderCurrency() + "\t         기간  ~ " + verification.getEndDate()),
-                    CustomTextType.subtitle.getText("거래소명           \t " + verification.getExchangeName()),
-                    CustomTextType.subtitle.getText("수익 실현 금액     \t " + verification.getProfit() + " " + verification.getPaymentCurrency()),
-                    CustomTextType.subtitle.getText("수익률              \t " + verification.getYield() + "%"),
+//                    CustomTextType.title.getText(verification.getUserId() + "'s Verification"),
+                    CustomTextType.subtitle.getText("coin name            \t " + verification.getOrderCurrency() + "\t         기간  ~ " + verification.getEndDate()),
+                    CustomTextType.subtitle.getText("exchanged at       \t " + verification.getExchangeName()),
+                    CustomTextType.subtitle.getText("profit     \t " + verification.getProfit() + " " + verification.getPaymentCurrency()),
+                    CustomTextType.subtitle.getText("Yield              \t " + verification.getYield() + "%"),
                     CustomTextType.subtitle.getText("  "),
-                    CustomTextType.comment.getText("created by VMC")
+                    CustomTextType.comment.getText("certified by VMC.")
         );
         writeWatermark(resultImage);
 //        log.info("이미지 파일 생성 완료");
@@ -141,63 +141,63 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
-    /**
-     * 
-     * @param imageUrl
-     * @return 사진이 저장된 경로 반환
-     * @throws NotFoundImageException
-     */
-    @Override
-    public Map<String, String> downloadImage(String imageUrl) throws NotFoundImageException {
-        String outputDir = "D:/vmc/";
-        String fileName = IOUtil.getDateFormat() + ".png";
-        InputStream is = null;
-        FileOutputStream os = null;
+//    /**
+//     *
+//     * @param imageUrl
+//     * @return 사진이 저장된 경로 반환
+//     * @throws NotFoundImageException
+//     */
+//    @Override
+//    public Map<String, String> downloadImage(String imageUrl) throws NotFoundImageException {
+//        String outputDir = "D:/vmc/";
+//        String fileName = IOUtil.getDateFormat() + ".png";
+//        InputStream is = null;
+//        FileOutputStream os = null;
+//
+//        try{
+//            URL url = new URL(imageUrl);
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//            is = conn.getInputStream();
+//
+//            IOUtil.createDir(outputDir);
+//            os = new FileOutputStream(new File(outputDir, fileName));
+//            IOUtil.writeFile(is, os);
+//
+//            conn.disconnect();
+//            log.debug("이미지 파일 다운로드 완료");
+//        } catch (Exception e) {
+//            log.error("An error occurred while trying to download a file.");
+//            throw new NotFoundImageException();
+//        } finally {
+//            IOUtil.close(is, os);
+//        }
+//        Map<String, String> resultMap = new HashMap<>();
+//        resultMap.put("dir", outputDir + fileName);
+//        return resultMap;
+//    }
 
-        try{
-            URL url = new URL(imageUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            is = conn.getInputStream();
-
-            IOUtil.createDir(outputDir);
-            os = new FileOutputStream(new File(outputDir, fileName));
-            IOUtil.writeFile(is, os);
-
-            conn.disconnect();
-            log.debug("이미지 파일 다운로드 완료");
-        } catch (Exception e) {
-            log.error("An error occurred while trying to download a file.");
-            throw new NotFoundImageException();
-        } finally {
-            IOUtil.close(is, os);
-        }
-        Map<String, String> resultMap = new HashMap<>();
-        resultMap.put("dir", outputDir + fileName);
-        return resultMap;
-    }
-
-    /**
-     * 
-     * @param verificationId
-     * @return verificationId에 매치되는 url 반환
-     * @throws Exception
-     */
-    @Override
-    public Map<String, String> getImageUrl(String verificationId) throws Exception {
-        Map<String, String> resultMap = new HashMap<>();
-        Verification verification = verificationRepository.findById(verificationId).orElseThrow(() -> new NotFoundVerificationException());
-
-        URL url = new URL(verification.getImageUrl());
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        int responseCode = conn.getResponseCode();
-
-        // 만약 url이 잘못 되었다면 이미지 다시 생성
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-//            throw new InvalidImageUrlException();
-            resultMap.put("url", saveImage(verification));
-        } else {
-            resultMap.put("url", verification.getImageUrl());
-        }
-        return resultMap;
-    }
+//    /**
+//     *
+//     * @param verificationId
+//     * @return verificationId에 매치되는 url 반환
+//     * @throws Exception
+//     */
+//    @Override
+//    public Map<String, String> getImageUrl(String verificationId) throws Exception {
+//        Map<String, String> resultMap = new HashMap<>();
+//        Verification verification = verificationRepository.findById(verificationId).orElseThrow(() -> new NotFoundVerificationException());
+//
+//        URL url = new URL(verification.getImageUrl());
+//        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//        int responseCode = conn.getResponseCode();
+//
+//        // 만약 url이 잘못 되었다면 이미지 다시 생성
+//        if (responseCode != HttpURLConnection.HTTP_OK) {
+////            throw new InvalidImageUrlException();
+//            resultMap.put("url", saveImage(verification));
+//        } else {
+//            resultMap.put("url", verification.getImageUrl());
+//        }
+//        return resultMap;
+//    }
 }

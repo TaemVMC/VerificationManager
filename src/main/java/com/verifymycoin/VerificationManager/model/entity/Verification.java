@@ -34,5 +34,7 @@ public class Verification {
 
     private String yield;           // 수익률
 
-    private String imageUrl;
+    private String imageUrl;        // 이미지 썸네일 url
+
+    private String imageDownloadUrl;    // 이미지 다운로드 url
 }

@@ -2,6 +2,7 @@ package com.verifymycoin.VerificationManager.service;
 
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundImageException;
 import com.verifymycoin.VerificationManager.model.entity.Verification;
+import org.springframework.http.ResponseEntity;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -14,7 +15,5 @@ public interface ImageService {
 
     void writeWatermark(BufferedImage sourceImage);
 
-    Map<String, String> downloadImage(String imageUrl) throws NotFoundImageException;
-
-    Map<String, String> getImageUrl(String verificationId) throws Exception;
+//    Map<String, String> getImageUrl(String verificationId) throws Exception;
 }

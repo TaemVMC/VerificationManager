@@ -41,26 +41,26 @@ public class VerificationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/image/{verificationId}")
-    @ApiOperation(value = "증명서 image url", notes = "증명서 image url")
-    public ResponseEntity<?> getVerificationImageUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) throws Exception {
-        VerificationResponse response = null;
-        try {
-            response = VerificationResponse.of(StatusEnum.OK, imageService.getImageUrl(verificationId));
-        } catch (NotFoundVerificationException e) {
-            throw new NotFoundVerificationException();
-        } catch (InvalidImageUrlException e) {
-            throw new InvalidImageUrlException();
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @GetMapping("/image/{verificationId}")
+//    @ApiOperation(value = "증명서 image url", notes = "증명서 image url")
+//    public ResponseEntity<?> getVerificationImageUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) throws Exception {
+//        VerificationResponse response = null;
+//        try {
+//            response = VerificationResponse.of(StatusEnum.OK, imageService.getImageUrl(verificationId));
+//        } catch (NotFoundVerificationException e) {
+//            throw new NotFoundVerificationException();
+//        } catch (InvalidImageUrlException e) {
+//            throw new InvalidImageUrlException();
+//        }
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     // 증명 image 다운로드
     @GetMapping("/image/download/{verificationId}")
     @ApiOperation(value = "증명서 image 다운로드", notes = "증명서 image 다운로드")
     public ResponseEntity<?> getVerificationImage(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true) String verificationId) {
         try {
-            VerificationResponse verificationResponse =  VerificationResponse.of(StatusEnum.OK, imageService.downloadImage(verificationRepository.findById(verificationId).get().getImageUrl()));
+            VerificationResponse verificationResponse =  VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId).get().getImageDownloadUrl());
             return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
         } catch (Exception e) {
             throw new NotFoundImageException();
