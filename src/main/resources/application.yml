@@ -24,13 +24,6 @@ cloud:
     stack:
       auto: false
 
-logging:
-  file:
-    name: "/log/verification-manager.log"
-  logback:
-    rollingpolicy:
-      max-file-size: 10MB
-      total-size-cap: 100MB
 
 verification:
   redirect-url: http://localhost:3000/CertificationUrl/

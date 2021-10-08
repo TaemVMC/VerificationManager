@@ -2,11 +2,3 @@ server:
   port: 8080
 
 foo: bar_local
-
-logging:
-  file:
-    name: "/log/verification-manager.log"
-  logback:
-    rollingpolicy:
-      max-file-size: 10MB
-      total-size-cap: 100MB
