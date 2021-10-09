@@ -1,9 +1,6 @@
 package com.verifymycoin.VerificationManager.common.error;
 
-import com.verifymycoin.VerificationManager.common.error.custom.InvalidImageUrlException;
-import com.verifymycoin.VerificationManager.common.error.custom.NotFoundImageException;
-import com.verifymycoin.VerificationManager.common.error.custom.NotFoundUserException;
-import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
+import com.verifymycoin.VerificationManager.common.error.custom.*;
 import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;
 import org.springframework.http.HttpStatus;
@@ -47,6 +44,13 @@ public class ControllerAdvice {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     protected ResponseEntity<VerificationResponse> handleInvalidImageUrlException(InvalidImageUrlException e) {
         VerificationResponse response = VerificationResponse.of(StatusEnum.INVALID_IMAGE_URL);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = NotFoundVerificationPublicException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected ResponseEntity<VerificationResponse> handleNotFoundVerificationPublicException(NotFoundVerificationPublicException e) {
+        VerificationResponse response = VerificationResponse.of(StatusEnum.NOT_FOUND_PUBLIC_VERIFICATION);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

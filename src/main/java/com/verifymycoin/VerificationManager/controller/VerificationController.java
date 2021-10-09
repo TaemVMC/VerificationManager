@@ -1,6 +1,7 @@
 package com.verifymycoin.VerificationManager.controller;
 
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
+import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationPublicException;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;
 import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
@@ -64,7 +65,8 @@ public class VerificationController {
     @GetMapping("/external/{verificationId}")
     @ApiOperation(value = "증명서 url(상세페이지)", notes = "증명서 url(상세페이지)")
     public ResponseEntity<?> getVerificationUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) {
-        VerificationResponse verificationResponse = VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId));
+
+        VerificationResponse verificationResponse = VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId).orElseThrow(NotFoundVerificationPublicException::new));
         return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
     }
 
