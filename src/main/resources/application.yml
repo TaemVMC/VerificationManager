@@ -29,3 +29,10 @@ cloud:
 
 verification:
   redirect-url: http://localhost:3000/CertificationUrl/
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR

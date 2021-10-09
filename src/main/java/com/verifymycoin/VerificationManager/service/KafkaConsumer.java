@@ -25,10 +25,14 @@ public class KafkaConsumer {
     // 카프카 이벤트 처리
     @KafkaListener(topics = "transactionSummary")
     public void consume(
-            @Payload Verification verificationRequest) throws IOException {
+            @Payload Verification verificationRequest) {
 
         log.info("event listen : {}", verificationRequest);
-        imageService.saveImage(verificationRequest);
+        try {
+            imageService.saveImage(verificationRequest);
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
     }
 
     // 카프카 이벤트 처리

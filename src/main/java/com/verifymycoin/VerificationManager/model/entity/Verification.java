@@ -25,6 +25,8 @@ public class Verification {
 
     private String exchangeName;    // 거래소명
 
+    private String startDate;       // 코인 첫 거래 시작일
+    
     private String endDate;         // 조회 종료일
 
     private String orderCurrency;   // 코인
