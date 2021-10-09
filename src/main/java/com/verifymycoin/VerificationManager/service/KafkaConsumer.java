@@ -1,5 +1,6 @@
 package com.verifymycoin.VerificationManager.service;
 
+import com.verifymycoin.VerificationManager.model.entity.User;
 import com.verifymycoin.VerificationManager.model.entity.Verification;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +25,18 @@ public class KafkaConsumer {
     // 카프카 이벤트 처리
     @KafkaListener(topics = "transactionSummary")
     public void consume(
-            @Payload Verification verificationRequest,
-            @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) throws IOException {
+            @Payload Verification verificationRequest) throws IOException {
 
         log.info("event listen : {}", verificationRequest);
         imageService.saveImage(verificationRequest);
     }
 
     // 카프카 이벤트 처리
-    @KafkaListener(topics = "userManager.signOut")
+    @KafkaListener(topics = "userManager.signOut", containerFactory = "userKafkaListenerFactory")
     public void signOut(
-            @Payload String userId,
-            @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
+            @Payload User user) {
 
-        log.info("event listen : {}", userId);
-        verificationRepository.deleteAllByUserId(userId);
+        log.info("event listen : {}", user);
+        verificationRepository.deleteAllByUserId(user.getUserId());
     }
 }

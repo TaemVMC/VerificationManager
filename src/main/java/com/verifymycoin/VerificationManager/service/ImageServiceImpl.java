@@ -47,8 +47,8 @@ public class ImageServiceImpl implements ImageService {
 
         String id = verificationRepository.save(verification).getId();
         verification.setCertificationUrl(redirectUrl + id);
-
-        log.info("verification object id : {}", verificationRepository.save(verification).getId());
+        verificationRepository.save(verification);
+//        log.info("verification object id : {}", );
         return url.get(0);
     }
 

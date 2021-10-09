@@ -10,7 +10,9 @@ spring:
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     consumer:
-      group-id: team-vmc
+      group-id: verification-group
+      transaction-topic: transactionSummary
+      user-topic: userManager.signOut
 
 cloud:
   aws:
