@@ -26,5 +26,6 @@ cloud:
     stack:
       auto: false
 
+
 verification:
   redirect-url: http://localhost:3000/CertificationUrl/

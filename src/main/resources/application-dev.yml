@@ -12,6 +12,17 @@ spring:
     consumer:
       group-id: team-vmc
 
+
+logging:
+  file:
+    name: "/log/verification-manager.log"
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      total-size-cap: 100MB
+  pattern:
+    console:
+
 cloud:
   aws:
     credentials:
