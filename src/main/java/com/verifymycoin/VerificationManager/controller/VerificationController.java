@@ -61,7 +61,7 @@ public class VerificationController {
 //    }
 
     // 증명 url
-    @GetMapping("/{verificationId}")
+    @GetMapping("/external/{verificationId}")
     @ApiOperation(value = "증명서 url(상세페이지)", notes = "증명서 url(상세페이지)")
     public ResponseEntity<?> getVerificationUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) {
         VerificationResponse verificationResponse = VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId));
