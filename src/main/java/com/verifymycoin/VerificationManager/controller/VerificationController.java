@@ -72,18 +72,6 @@ public class VerificationController {
 //        }
 //    }
 
-<<<<<<< HEAD
-    // 증명 url
-    @GetMapping("/external/{verificationId}")
-    @ApiOperation(value = "증명서 url", notes = "증명서 url")
-    public ResponseEntity<?> getVerificationUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) {
-
-        VerificationResponse verificationResponse = VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId));
-        return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
-    }
-
-=======
->>>>>>> 02041c478a6277aa6530348be9a09e13553b4197
     // 이미지 다시 생성
 //    @PostMapping("/image")
 //    @ApiOperation(value = "증명 image 재생성", notes = "증명 image url이 잘못되었을 경우 다시 생성하기 위함")
