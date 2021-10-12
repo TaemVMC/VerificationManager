@@ -10,7 +10,9 @@ spring:
   kafka:
     bootstrap-servers: 13.209.68.198:9092
     consumer:
-      group-id: team-vmc
+      group-id: verification-group
+      transaction-topic: transactionSummary
+      user-topic: userManager.signOut
 
 
 logging:
@@ -36,4 +38,4 @@ cloud:
       auto: false
 
 verification:
-  redirect-url: http://localhost:3000/CertificationUrl/
+  redirect-url: http://vmc-front-prd.s3-website.ap-northeast-2.amazonaws.com/CertificationUrl/
