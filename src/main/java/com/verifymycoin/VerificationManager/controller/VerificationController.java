@@ -2,6 +2,7 @@ package com.verifymycoin.VerificationManager.controller;
 
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationException;
 import com.verifymycoin.VerificationManager.common.error.custom.NotFoundVerificationPublicException;
+import com.verifymycoin.VerificationManager.model.entity.Verification;
 import com.verifymycoin.VerificationManager.model.response.VerificationResponse;
 import com.verifymycoin.VerificationManager.model.response.StatusEnum;
 import com.verifymycoin.VerificationManager.repository.VerificationRepository;
@@ -35,6 +36,16 @@ public class VerificationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // 증명 url
+    @GetMapping("/external/{verificationId}")
+    @ApiOperation(value = "증명서 url(상세페이지)", notes = "증명서 url(상세페이지)")
+    public ResponseEntity<?> getVerificationUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) {
+
+        VerificationResponse verificationResponse = VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId).orElseThrow(NotFoundVerificationPublicException::new));
+        return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
+    }
+
+
 //    @GetMapping("/image/{verificationId}")
 //    @ApiOperation(value = "증명서 image url", notes = "증명서 image url")
 //    public ResponseEntity<?> getVerificationImageUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) throws Exception {
@@ -60,15 +71,6 @@ public class VerificationController {
 //            throw new NotFoundImageException();
 //        }
 //    }
-
-    // 증명 url
-    @GetMapping("/external/{verificationId}")
-    @ApiOperation(value = "증명서 url(상세페이지)", notes = "증명서 url(상세페이지)")
-    public ResponseEntity<?> getVerificationUrl(@PathVariable @ApiParam(value = "해당 증명서의 id", required = true)  String verificationId) {
-
-        VerificationResponse verificationResponse = VerificationResponse.of(StatusEnum.OK, verificationRepository.findById(verificationId).orElseThrow(NotFoundVerificationPublicException::new));
-        return new ResponseEntity<>(verificationResponse, HttpStatus.OK);
-    }
 
     // 이미지 다시 생성
 //    @PostMapping("/image")

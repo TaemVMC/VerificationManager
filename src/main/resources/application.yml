@@ -4,11 +4,11 @@ server:
 spring:
   data:
     mongodb:
-        uri: mongodb://13.209.68.198/VerificationManager
+        uri: mongodb://13.209.68.198:27017/VerificationManager
   jackson:
     property-naming-strategy: SNAKE_CASE
   kafka:
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: 13.209.68.198:9092
     consumer:
       group-id: verification-group
       transaction-topic: transactionSummary
