@@ -38,4 +38,4 @@ cloud:
       auto: false
 
 verification:
-  redirect-url: http://vmc-front-prd.s3-website.ap-northeast-2.amazonaws.com/CertificationUrl/
+  redirect-url: http://localhost:3000/CertificationUrl/
