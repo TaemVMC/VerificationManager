@@ -10,7 +10,9 @@ spring:
   kafka:
     bootstrap-servers: 13.209.68.198:9092
     consumer:
-      group-id: team-vmc
+      group-id: verification-group
+      transaction-topic: transactionSummary
+      user-topic: userManager.signOut
 
 
 logging:
